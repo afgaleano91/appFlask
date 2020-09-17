@@ -1,0 +1,14 @@
+<nav>
+    <ul>
+        <img src="{{ url_for('static', filename='images/ahri.png') }}"/>
+        <li>
+            <a href="{{ url_for('index') }}"> Ir a Inicio </a>
+        </li>
+        <li>
+            <a href="https://platzi.com" target="blank">Ir a platzi</a>
+        </li>
+    </ul>
+    {% if not user_ip %}
+        <img src="{{ url_for('static', filename='images/zoe.png') }}" alt="zoe" class="center">
+    {% endif %}
+</nav>
