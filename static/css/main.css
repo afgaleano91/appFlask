@@ -1,0 +1,15 @@
+html * {
+    font-family: sans-serif;
+}
+
+img {
+    max-width: 30px;
+}
+
+.center {
+    max-width: 150px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
