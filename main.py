@@ -1,14 +1,13 @@
-from flask import request, make_response, redirect, render_template, session, url_for, flash
-from flask_bootstrap import Bootstrap
-
 import unittest
+from flask import request, make_response, redirect, render_template, session, url_for, flash
+from flask_login import login_required
+
 from app import create_app
 from app.forms import LoginForm
+from app.firestore_service import get_users
+from app.firestore_service import get_todos
 
 app = create_app()
-
-todos = ['Comprar cafe', 'Entregar registro', 'Programar afiliaciones']
-
 
 @app.cli.command()
 def test():
@@ -37,14 +36,16 @@ def index():
 
 #Se establece la ruta de index
 @app.route('/hello', methods=['GET'])
+@login_required
 def hello():
     user_ip = session.get('user_ip')
     username = session.get('username')
 
     context = {
         'user_ip' : user_ip,
-        'todos' : todos,
+        'todos' : get_todos(user_id=username),
         'username': username
     }
+    
 
     return render_template('hello.html', **context)
