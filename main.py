@@ -3,9 +3,8 @@ from flask import request, make_response, redirect, render_template, session, ur
 from flask_login import login_required, current_user
 
 from app import create_app
-from app.forms import LoginForm
-from app.firestore_service import get_users
-from app.firestore_service import get_todos
+from app.forms import ToDoForm
+from app.firestore_service import get_users, get_todos, put_todo
 
 app = create_app()
 
@@ -35,17 +34,26 @@ def index():
 
 
 #Se establece la ruta de index
-@app.route('/hello', methods=['GET'])
+@app.route('/hello', methods=['GET', 'POST'])
 @login_required
 def hello():
     user_ip = session.get('user_ip')
     username = current_user.id
+    todo_form = ToDoForm()
 
     context = {
         'user_ip' : user_ip,
         'todos' : get_todos(user_id=username),
-        'username': username
+        'username': username,
+        'todo_form': todo_form
     }
     
+    if todo_form.validate_on_submit():
+        put_todo(user_id=username, description=todo_form.description.data)
+
+        flash('Tu tarea ha sido creada con exito')
+
+        return redirect(url_for('hello'))
+
 
     return render_template('hello.html', **context)
